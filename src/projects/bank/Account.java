@@ -8,10 +8,19 @@ public class Account {
 
     //constructor
     public Account(String id, String name, AccountType type, double balance) {
-        this.accountID = id;
-        this.accountHolderName = name;
-        this.accountType = type;
-        this.balance = balance;
+        if (id == null) {
+            throw new IllegalArgumentException("Account ID cannot be null or empty.");
+        }
+        else if(name == null){
+            throw new IllegalArgumentException("Account holder name cannot be null or empty.");
+        }
+        else if(type == null){
+            throw new IllegalArgumentException("Account type cannot be null or empty.");
+        }
+        accountID = id;
+        accountHolderName = name;
+        accountType = type;
+        balance = balance;
     }
 
     // Accessors

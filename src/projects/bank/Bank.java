@@ -8,7 +8,7 @@ public class Bank {
     }
 
     public boolean addAccount(Account account) {
-        int slot = openSlot();
+        int slot = openSlot(null);
         if (slot != -1) {
             accounts[slot] = account;
             return true;
@@ -20,13 +20,12 @@ public class Bank {
         // Implementation to load accounts
         
     }
-
-    private int openSlot() {
+    private int findID(String id) {
         for (int i = 0; i < accounts.length; i++) {
-            if (accounts[i] == null) {
+            if (accounts[i] == id) {
                 return i;
             }
         }
-        return -1; // No open slots
+        return -1; // Not found
     }
 }
