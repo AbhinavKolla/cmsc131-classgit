@@ -1,6 +1,4 @@
-package projects;
-//ask dusel about this, I thought i didn't need to import within the same project
-import projects.bank.Account;
+package projects.bank;
 
 public class Bank {
     private Account[] accounts;
