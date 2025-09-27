@@ -6,6 +6,7 @@ public class Account {
     private final AccountType accountType;
     private double balance;
 
+    // TODO write javadoc, eg Canine.java lines 21-31
     //constructor
     public Account(String id, String name, AccountType type, double balance) {
         if (id == null) {
@@ -20,7 +21,7 @@ public class Account {
         accountID = id;
         accountHolderName = name;
         accountType = type;
-        balance = balance;
+        balance = balance;  // TODO resolve variable shadowing
     }
 
     // Accessors
