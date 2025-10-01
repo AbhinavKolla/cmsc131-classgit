@@ -1,4 +1,4 @@
-package projects.account;  // TODO correct package declartion
+package projects.bank;  // TODO correct package declartion
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,7 +18,7 @@ public class AccountTest{
     void constructorThrowsForInvalidID() {
         Exception exception = assertThrows(
             IllegalArgumentException.class,
-            () -> {new Account(null, "Abhi", "SAVINGS", 0);} // TODO use enum for account type
+            () -> {new Account(null, "Abhi", AccountType.SAVINGS, 0);} // TODO use enum for account type
         );
         assertEquals(
             "Account ID cannot be null or empty.", 
@@ -29,7 +29,7 @@ public class AccountTest{
     void constructorThrowsForInvalidName(){
         Exception exception = assertThrows(
             IllegalArgumentException.class,
-            () -> {new Account("w132", null, "SAVINGS", 0);} // TODO use enum for account type
+            () -> {new Account("w132", null, AccountType.SAVINGS, 0);} // TODO use enum for account type
         );
         assertEquals(
             "Account holder name cannot be null or empty.", 

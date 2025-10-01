@@ -4,10 +4,17 @@ public class Account {
     private final String accountID;
     private final String accountHolderName;
     private final AccountType accountType;
-    private double balance;
+    private double accountBalance;
 
-    // TODO write javadoc, eg Canine.java lines 21-31
-    //constructor
+    /**
+     * Constructor to initialize an Account object.
+     * @param id Unique identifier for the account.
+     * @param name Name of the account holder.
+     * @param type Type of the account (e.g., SAVINGS, CHECKING).
+     * @param balance Initial balance of the account.
+     * @throws IllegalArgumentException if any parameter is null or invalid.
+     */
+
     public Account(String id, String name, AccountType type, double balance) {
         if (id == null) {
             throw new IllegalArgumentException("Account ID cannot be null or empty.");
@@ -21,7 +28,7 @@ public class Account {
         accountID = id;
         accountHolderName = name;
         accountType = type;
-        balance = balance;  // TODO resolve variable shadowing
+        accountBalance = balance;  // TODO resolve variable shadowing
     }
 
     // Accessors
