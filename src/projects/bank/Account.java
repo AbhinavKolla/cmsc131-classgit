@@ -28,7 +28,17 @@ public class Account {
         accountID = id;
         accountHolderName = name;
         accountType = type;
-        accountBalance = balance;  // TODO resolve variable shadowing
+        accountBalance = balance; 
+    }
+
+    //factory
+    public static Account createAccount(String token) {
+        String[] parts = token.split(",");
+        AccountType type = AccountType.valueOf(parts[0].toUpperCase());
+        String name = parts[2];
+        String id = parts[1];
+        double balance = Double.parseDouble(parts[3]);
+        return new Account(id, name, type, balance);
     }
 
     // Accessors
@@ -45,7 +55,7 @@ public class Account {
     }
 
     public double getBalance() {
-        return balance;
+        return accountBalance;
     }
 }
     
