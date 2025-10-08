@@ -26,6 +26,7 @@ public class AccountTest{
         );
     }
 
+    @Test
     void constructorThrowsForInvalidName(){
         Exception exception = assertThrows(
             IllegalArgumentException.class,
@@ -37,6 +38,7 @@ public class AccountTest{
         );
     }
 
+    @Test
     void constructorThrowsForInvalidType(){
         Exception exception = assertThrows(
             IllegalArgumentException.class,
