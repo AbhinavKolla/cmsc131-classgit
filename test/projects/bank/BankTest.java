@@ -16,7 +16,7 @@ public class BankTest {
     }
 
     //im assuming that this is an acceptable way to test loading accounts and getCount at the same time.
-    @Test
+    @Test // TODO failing
     void testLoadAccountsAndGetCount() {
         assertEquals(392, bank.getCount());
     }
@@ -28,7 +28,7 @@ public class BankTest {
         assertEquals(true, result);
     }
 
-    @Test
+    @Test // TODO failing
     void testAddAccountDuplicateID() {
         Account duplicateAccount = new Account("wz240833", "Jane Doe", AccountType.SAVINGS, 500.0);
         boolean result = bank.addAccount(duplicateAccount);
