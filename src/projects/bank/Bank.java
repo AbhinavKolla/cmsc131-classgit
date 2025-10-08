@@ -27,6 +27,7 @@ public class Bank {
         * @return boolean indicating success or failure.
     */
     public boolean addAccount(Account account) {
+        // TODO add data validation
         int slot = findEmptySlot();
         if (findID(account.getAccountID()) == -1 && slot != -1) {
             accounts[slot] = account;
@@ -61,6 +62,7 @@ public class Bank {
             while(scanner.hasNext()) {
                 String token = scanner.nextLine();
                 System.out.println(token);
+                // TODO use addAccount method here
                 accounts[index] = Account.createAccount(token);
                 index++;
             }
@@ -78,7 +80,8 @@ public class Bank {
         * @param id The ID of the account to find.
         * @return The index of the account if found, -1 otherwise.
     */
-    private int findID(String id) {
+    public int findID(String id) {
+        // TODO data validation
         for (int i = 0; i < accounts.length; i++) {
             if (accounts[i] != null && accounts[i].getAccountID().equals(id)) {
                 return i;
@@ -91,7 +94,9 @@ public class Bank {
      * Finds the index of the first empty slot in the accounts array.
      * @return The index of the first empty slot, -1 if none are available.
      */
-    private int findEmptySlot() {
+    // TODO consider maintaining this int as an instance variable, instead 
+    // of iterating through accounts on each attempted add
+     private int findEmptySlot() {
         for (int i = 0; i < accounts.length; i++) {
             if (accounts[i] == null) {
                 return i;
