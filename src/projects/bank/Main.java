@@ -8,8 +8,7 @@ public class Main {
     public static void main(String[] args) {
         
         phase1();
-        bank.loadAccounts();
-        bank.writeAccounts();
+        
     }
 
     public static void phase1() {
@@ -41,6 +40,9 @@ public class Main {
             int numAccounts1 = bank.getCount();
             int findAcct1 = bank.findID(acct.getAccountID());
 
+            bank.loadAccounts(Bank.READ_FILE);
+            bank.writeAccounts(Bank.WRITE_FILE);    
+            
             writer.write(
                 String.format(
                     "Bank init: getCount=%d, find=%d",

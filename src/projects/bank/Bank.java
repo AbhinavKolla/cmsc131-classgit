@@ -10,7 +10,8 @@ public class Bank {
     private Account[] accounts;
     private int openSlot;
 
-    public final File FILE = new File("/workspaces/cmsc131-classgit-2/src/data/accounts.csv");
+    public static final File READ_FILE = new File("/workspaces/cmsc131-classgit/src/data/accountsRead.csv");
+    public static final File WRITE_FILE = new File("/workspaces/cmsc131-classgit/src/data/accountsWrite.csv");
     public static void main(String[] args) {
         
     }
@@ -60,9 +61,9 @@ public class Bank {
     /*
      * Loads accounts from the CSV file into the bank.
      */
-    public void loadAccounts() {
+    public void loadAccounts(File file) {
         try {
-            Scanner scanner = new Scanner(FILE);
+            Scanner scanner = new Scanner(file);
 
             while(scanner.hasNext()) {
                 String token = scanner.nextLine();
@@ -78,9 +79,9 @@ public class Bank {
         }
     }
 
-    public void writeAccounts(){
+    public void writeAccounts(File file){
         try {
-            FileWriter writer = new FileWriter(FILE);
+            FileWriter writer = new FileWriter(file);
             for (Account account : accounts){
                 if (account != null) {
                     writer.write(account + "\n");
@@ -100,20 +101,24 @@ public class Bank {
         * @return The index of the account if found, -1 otherwise.
     */
     public int findID(String id) {
-        // TODO data validation
-        for (int i = 0; i < accounts.length; i++) {
-            if (accounts[i] != null && accounts[i].getAccountID().equals(id)) {
-                return i;
-            }
+        if(id==null){
+            return -1;
         }
-        return -1; // Not found
+        else{
+            for (int i = 0; i < accounts.length; i++) {
+                if (accounts[i] != null && accounts[i].getAccountID().equals(id)) {
+                    return i;
+                }
+            }
+            return -1; // Not found
+        }
     }
 
     /*
      * Finds the index of the first empty slot in the accounts array.
      */
     
-     private void findEmptySlot() {
+     public void findEmptySlot() {
         for (int i = 0; i < accounts.length; i++) {
             if (accounts[i] == null) {
                 openSlot = i;
