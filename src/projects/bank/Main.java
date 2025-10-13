@@ -6,7 +6,10 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
+        
         phase1();
+        bank.loadAccounts();
+        bank.writeAccounts();
     }
 
     public static void phase1() {

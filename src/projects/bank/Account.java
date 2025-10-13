@@ -41,6 +41,10 @@ public class Account {
         return new Account(id, name, type, balance);
     }
 
+    public String toString() {
+        return accountType + "," + accountID + "," + accountHolderName + "," + accountBalance;
+    }
+
     // Accessors
     public String getAccountID() {
         return accountID;

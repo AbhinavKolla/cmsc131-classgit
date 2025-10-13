@@ -1,18 +1,18 @@
 package projects.bank;
 
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
 
 public class Bank {
     private Account[] accounts;
-    public final File FILE = new File("/workspaces/cmsc131-classgit-1/src/data/accounts.csv");
+    private int openSlot;
+
+    public final File FILE = new File("/workspaces/cmsc131-classgit-2/src/data/accounts.csv");
     public static void main(String[] args) {
-        Bank bank = new Bank();
-
-
-
-        bank.loadAccounts(bank.FILE);
+        
     }
 
     public Bank() {
@@ -27,10 +27,16 @@ public class Bank {
         * @return boolean indicating success or failure.
     */
     public boolean addAccount(Account account) {
-        // TODO add data validation
-        int slot = findEmptySlot();
-        if (findID(account.getAccountID()) == -1 && slot != -1) {
-            accounts[slot] = account;
+        if (findID(account.getAccountID()) == -1 && openSlot != -1 && account != null) {
+            accounts[openSlot] = account;
+
+            //if openSlot is at end, find new empty slot, else increment
+            if (openSlot == accounts.length - 1) {
+                findEmptySlot();
+            }
+            else {
+                openSlot++;
+            }
             return true;
         }
 
@@ -54,17 +60,15 @@ public class Bank {
     /*
      * Loads accounts from the CSV file into the bank.
      */
-    public void loadAccounts(File file) {
+    public void loadAccounts() {
         try {
-            Scanner scanner = new Scanner(file);
-            int index = 0;
+            Scanner scanner = new Scanner(FILE);
 
             while(scanner.hasNext()) {
                 String token = scanner.nextLine();
                 System.out.println(token);
-                // TODO use addAccount method here
-                accounts[index] = Account.createAccount(token);
-                index++;
+                this.addAccount(Account.createAccount(token));
+                
             }
             scanner.close();
         }
@@ -74,6 +78,21 @@ public class Bank {
         }
     }
 
+    public void writeAccounts(){
+        try {
+            FileWriter writer = new FileWriter(FILE);
+            for (Account account : accounts){
+                if (account != null) {
+                    writer.write(account + "\n");
+                }
+            }
+            writer.close();
+        } 
+        
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /*
         * Finds the index of an account by its ID.
@@ -90,19 +109,17 @@ public class Bank {
         return -1; // Not found
     }
 
-    /* 
+    /*
      * Finds the index of the first empty slot in the accounts array.
-     * @return The index of the first empty slot, -1 if none are available.
      */
-    // TODO consider maintaining this int as an instance variable, instead 
-    // of iterating through accounts on each attempted add
-     private int findEmptySlot() {
+    
+     private void findEmptySlot() {
         for (int i = 0; i < accounts.length; i++) {
             if (accounts[i] == null) {
-                return i;
+                openSlot = i;
             }
         }
-        return -1; // No empty slot found
+        openSlot = -1;
     }
 
 }
