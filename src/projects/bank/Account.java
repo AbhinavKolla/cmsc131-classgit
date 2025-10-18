@@ -31,6 +31,7 @@ public class Account {
         accountBalance = balance; 
     }
 
+    // TODO javadoc
     //factory
     public static Account createAccount(String token) {
         String[] parts = token.split(",");
