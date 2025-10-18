@@ -55,6 +55,14 @@ public class BankTest {
         Bank newBank = new Bank();
         newBank.loadAccounts(Bank.WRITE_FILE);
         assertEquals(bank.getCount(), newBank.getCount());
+        // TODO check accounts in bank and newBank are the same
     }
+
+    // TODO loadAccounts failure mode
+    // TODO loadAccounts preserves data
+    // TODO loadAccounts returns true on succeed
+    // TODO writeAccounts failure mode
+    // TODO writeAccounts returns true on succeed
+    // TODO writeAccounts preserves data
 
 }
