@@ -60,6 +60,9 @@ public class Bank {
 
     /*
      * Loads accounts from the CSV file into the bank.
+     * TODO description of input/output
+     * TODO input String not File
+     * TODO return boolean
      */
     public void loadAccounts(File file) {
         try {
@@ -67,7 +70,7 @@ public class Bank {
 
             while(scanner.hasNext()) {
                 String token = scanner.nextLine();
-                System.out.println(token);
+                System.out.println(token); // what's this instrumentation for?
                 this.addAccount(Account.createAccount(token));
                 
             }
@@ -79,12 +82,18 @@ public class Bank {
         }
     }
 
+    // TODO javadoc
+    // TODO input String not FIle
+    // TODO return boolean
     public void writeAccounts(File file){
         try {
             FileWriter writer = new FileWriter(file);
             for (Account account : accounts){
                 if (account != null) {
                     writer.write(account + "\n");
+                    // "\n" is okay because you're using a dev container 
+                    // running linux. instead, consider using 
+                    // System.lineSeparator() which is os-agnostic
                 }
             }
             writer.close();
