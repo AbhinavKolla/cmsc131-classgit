@@ -10,8 +10,8 @@ public class Bank {
     private Account[] accounts;
     private int openSlot;
 
-    public static final File READ_FILE = new File("/workspaces/cmsc131-classgit/src/data/accountsRead.csv");
-    public static final File WRITE_FILE = new File("/workspaces/cmsc131-classgit/src/data/accountsWrite.csv");
+    public static final File READ_FILE = new File("data/accountsRead.csv");
+    public static final File WRITE_FILE = new File("data/accountsWrite.csv");
     public static void main(String[] args) {
         
     }
