@@ -49,4 +49,10 @@ public class AccountTest{
             exception.getMessage()
         );
     }
+
+    // TODO 
+    // static factory throws on null input
+    // static factory preserves data
+    // static factor failure mode
+    // toCSV output is correct
 }
