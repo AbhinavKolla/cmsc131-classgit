@@ -63,4 +63,16 @@ public class Main {
             writer.close();
         } catch (IOException e) { e.printStackTrace(); }
     }
+
+    public static void phase2() {
+        String accountsFilename = "data/accounts.csv";
+        Bank bank = new Bank();
+        boolean result = bank.loadAccounts(accountsFilename); // TODO input String
+
+        System.out.println("Result of loading account: " + result);
+        System.out.println("Number of accounts: " + bank.getCount());
+
+        String outputFilename = "data/phase2.csv";
+        bank.writeAccounts(outputFilename); // TODO input String
+    }
 }
