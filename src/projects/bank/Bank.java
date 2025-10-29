@@ -10,8 +10,8 @@ public class Bank {
     private Account[] accounts;
     private int openSlot;
 
-    public static final File READ_FILE = new File("data/accountsRead.csv");
-    public static final File WRITE_FILE = new File("data/accountsWrite.csv");
+    public static final String READ_FILE = ("data/accountsRead.csv");
+    public static final String WRITE_FILE = ("data/accountsWrite.csv");
     public static void main(String[] args) {
         
     }
@@ -64,20 +64,42 @@ public class Bank {
      * TODO input String not File
      * TODO return boolean
      */
-    public void loadAccounts(File file) {
+    public void loadAccounts(String fileName) {
         try {
+            File file = new File(fileName);
             Scanner scanner = new Scanner(file);
 
             while(scanner.hasNext()) {
-                String token = scanner.nextLine();
-                System.out.println(token); // what's this instrumentation for?
-                this.addAccount(Account.createAccount(token));
+                Transaction trs = Transaction.make(scanner.nextLine());
+                int targetIdx = this.find(trs.getAccountID);
+
+                if(targetIdx>0){
+                    Account target = accounts[targetIdx];
+                    if(trs.validate(target))
+                        trs.execute(target);
+                }
+
                 
             }
             scanner.close();
         }
-
         catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void processTransactions(String fileName){
+        try{
+        File file = new File(fileName);
+        Scanner scanner = new Scanner(file);
+
+        while(scanner.hasNext()) {
+                String token = scanner.nextLine();
+                this.addAccount(Account.createAccount(token));
+                
+            }
+
+        } catch(FileNotFoundException e){
             e.printStackTrace();
         }
     }
@@ -85,8 +107,9 @@ public class Bank {
     // TODO javadoc
     // TODO input String not FIle
     // TODO return boolean
-    public void writeAccounts(File file){
+    public void writeAccounts(String fileName){
         try {
+            File file = new File(fileName);
             FileWriter writer = new FileWriter(file);
             for (Account account : accounts){
                 if (account != null) {

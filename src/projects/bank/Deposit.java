@@ -7,15 +7,13 @@ public class Deposit extends Transaction {
     }
 
     @Override
-    public void execute(Account accont) {
-        // TODO
-        throw new UnsupportedOperationException("Student must implement.");
+    public void execute(Account account) {
+        account.deposit(amount);
     }
 
     @Override 
     public boolean validate(Account account) {
-        // TODO
-        throw new UnsupportedOperationException("Student must implement.");
+        return true;
     }
 
 }

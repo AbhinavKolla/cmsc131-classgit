@@ -31,12 +31,20 @@ abstract class Account {
         AccountType type = AccountType.valueOf(parts[0].toUpperCase());
         String name = parts[2];
         String id = parts[1];
-        double balance = Double.parseDouble(parts[3]);
+        double balance = Double.parseDouble(parts[3]); 
 
         if(type==CheckingAccount.CHECKING)
             return new CheckingAccount(id, name, balance);
         else if (type==CheckingAccount.SAVINGS)
             return new SavingAccount(id, name, balance);
+    }
+
+    public void deposit(double amount){
+        this.balance += amount;
+    }
+
+    public void withdraw(double amount){
+        this.balance -= amount;
     }
 
     public String toString(){

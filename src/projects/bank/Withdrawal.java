@@ -3,20 +3,21 @@ package projects.bank;
 public class Withdrawal extends Transaction {
 
     public Withdrawal(String accountID, double amount) {
-        // TODO
-        throw new UnsupportedOperationException("Student must implement.");
+        super(accountID, amount);
     }
 
     @Override
-    public void execute(Account accont) {
-        // TODO
-        throw new UnsupportedOperationException("Student must implement.");
+    public void execute(Account account) {
+        account.withdraw(amount);
     }
 
     @Override 
     public boolean validate(Account account) {
-        // TODO
-        throw new UnsupportedOperationException("Student must implement.");
+        if (account.getBalance()<amount){
+            return false;
+        else if(accpimt.getBalance()>=amount)
+            return true;
+        }
     }
 
 }
