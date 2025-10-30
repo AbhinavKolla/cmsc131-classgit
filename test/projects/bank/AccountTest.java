@@ -1,4 +1,4 @@
-package projects.bank;  // TODO correct package declartion
+package projects.bank;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -42,21 +42,47 @@ public class AccountTest{
         );
     }
 
+    
     @Test
-    void constructorThrowsForInvalidType(){
+    void staticFactoryThrowsOnNullInput() {
         Exception exception = assertThrows(
             IllegalArgumentException.class,
-            () -> {new SavingAccount("w132", "Abhi", 0);}
+            () -> {Account.createAccount(null);}
         );
         assertEquals(
-            "Account type cannot be null or empty.", 
+            "Parameter token cannot be null.",
             exception.getMessage()
         );
     }
 
-    // TODO 
-    // static factory throws on null input
     // static factory preserves data
-    // static factor failure mode
-    // toCSV output is correct
+    @Test
+    void staticFactoryPreservesData() {
+        String token = "checking,wz240833,Anna Gomez,8111.00";
+        Account account = Account.createAccount(token);
+        assertEquals(AccountType.CHECKING, account.getAccountType());
+        assertEquals("wz240833", account.getAccountID());
+        assertEquals("Anna Gomez", account.getAccountHolderName());
+        assertEquals(8111.00, account.getBalance(), 0.001);
+    }
+
+    // static factory failure mode
+    @Test
+    void staticFactoryThrowsOnInvalidInput() {
+        Exception exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> {Account.createAccount("invalid_token");}
+        );
+        assertEquals(
+            "Invalid token data.",
+            exception.getMessage()
+        );
+    }
+
+    @Test
+    void toStringProducesCorrectOutput() {
+        String expected = "SAVINGS,wz240833,Anna Gomez,8111.000000";
+        String actual = account.toString();
+        assertEquals(expected, actual);
+    }
 }

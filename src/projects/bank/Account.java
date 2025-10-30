@@ -30,8 +30,12 @@ abstract class Account {
         if(token == null){
             throw new IllegalArgumentException("Parameter token cannot be null.");
         }
-        
+
         String[] parts = token.split(",");
+        if(parts.length != 4){
+            throw new IllegalArgumentException("Invalid token data.");
+        }
+        
         AccountType type = AccountType.valueOf(parts[0].toUpperCase());
         String name = parts[2];
         String id = parts[1];

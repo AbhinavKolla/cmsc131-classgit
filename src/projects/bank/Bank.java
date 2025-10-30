@@ -62,28 +62,31 @@ public class Bank {
      * @param fileName The name of the file to read from.
      * @return boolean indicating success or failure.
      */
-    public boolean processTransactions(String fileName) {
+    public int processTransactions(String fileName) {
         try {
             File file = new File(fileName);
             Scanner scanner = new Scanner(file);
+            int processedCount = 0;
 
             while(scanner.hasNext()) {
                 Transaction trs = Transaction.make(scanner.nextLine());
                 int targetIdx = this.findID(trs.getAccountID());
 
-                if(targetIdx>0){
+                if(targetIdx>=0){
                     Account target = accounts[targetIdx];
                     if(trs.validate(target))
                         trs.execute(target);
+                        processedCount++;
                 }
             }
             
             scanner.close();
-            return true;
+            return processedCount;
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return false;
+        return 0;
     }
 
     /* Loads accounts from a CSV file into the bank.

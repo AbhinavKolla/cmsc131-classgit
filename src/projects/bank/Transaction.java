@@ -41,12 +41,15 @@ abstract class Transaction {
      * @param inputLine the input line to parse
      * @return a Transaction object
      */
-    protected static Transaction make(String inputLine) {
+    public static Transaction make(String inputLine) {
         if (inputLine == null) {
             throw new IllegalArgumentException("Parameter inputLine cannot be null.");
         }
 
         String[] tokens = inputLine.split(",");
+        if (tokens.length != 3) {
+            throw new IllegalArgumentException("Invalid inputLine format.");
+        }
 
         if(tokens[0].equals(TransactionType.WITHDRAWAL.name())){
             return new Withdrawal(tokens[1], Double.valueOf(tokens[2]));

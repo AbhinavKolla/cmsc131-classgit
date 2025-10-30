@@ -1,5 +1,8 @@
 package projects.bank;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -15,9 +18,8 @@ public class BankTest {
         bank.loadAccounts(Bank.READ_FILE);
     }
 
-    //im assuming that this is an acceptable way to test loading accounts and getCount at the same time.
     @Test
-    void testLoadAccountsAndGetCount() {
+    void testLoadAccounts() {
         assertEquals(392, bank.getCount());
     }
 
@@ -55,7 +57,7 @@ public class BankTest {
         Bank newBank = new Bank();
         newBank.loadAccounts(Bank.WRITE_FILE);
         assertEquals(bank.getCount(), newBank.getCount());
-        // TODO check accounts in bank and newBank are the same
+        assertTrue(bank.getAccounts()[0].getAccountHolderName().equals(newBank.getAccounts()[0].getAccountHolderName()));
     }
 
     @Test
@@ -65,17 +67,47 @@ public class BankTest {
         assertEquals(false, result);
     }
     
-    // TODO loadAccounts preserves data
     @Test
-    void testLoadAccountsPreservesData() {
+    void testLoadAccountsReturnsTrueOnSuccess() {
+        Bank newBank = new Bank();
+        boolean result = newBank.loadAccounts(Bank.READ_FILE);
+        assertEquals(true, result);
+    }
+
+    @Test
+    void testWriteAccountsFailureMode() {
+        Bank newBank = new Bank();
+        boolean result = newBank.writeAccounts("fakeDir/test.txt");
+        assertEquals(false, result);
+    }
+
+    @Test
+    void testWriteAccountsReturnsTrueOnSuccess() {
+        Bank newBank = new Bank();
+        boolean result = newBank.writeAccounts(Bank.WRITE_FILE);
+        assertEquals(true, result);
+    }
+
+    @Test
+    void testWriteAccountsPreservesData() {
         Bank newBank = new Bank();
         newBank.loadAccounts(Bank.READ_FILE);
-        assertEquals(bank.getAccounts(), newBank.getAccounts());
-        
+        newBank.writeAccounts(Bank.WRITE_FILE);
+        assertArrayEquals(newBank.getAccounts(), newBank.getAccounts());
     }
-    // TODO loadAccounts returns true on succeed
-    // TODO writeAccounts failure mode
-    // TODO writeAccounts returns true on succeed
-    // TODO writeAccounts preserves data
 
+     @Test
+    void testProcessTransactionsFailure() {
+        int result = bank.processTransactions("not/a/file.csv");
+        assertEquals(result, 0);
+    }
+
+    @Test
+    void testProcessTransactionsSuccess() {
+        int result = bank.processTransactions("data/testtransactions.csv");
+        assertEquals(result, 4);
+    }
+
+        // pass data/testtransactions.csv and check number of transactions processed
 }
+
