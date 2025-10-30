@@ -10,15 +10,19 @@ public class AccountTest{
     private Account account;
 
     @BeforeEach
-    void setUp(){
-        account = new Account("w132", "Abhi", AccountType.SAVINGS, 0);
+    void setupAccount() {
+        account = new SavingAccount(
+            "wz240833",
+            "Anna Gomez",
+            8111.00
+        );
     }
 
     @Test
     void constructorThrowsForInvalidID() {
         Exception exception = assertThrows(
             IllegalArgumentException.class,
-            () -> {new Account(null, "Abhi", AccountType.SAVINGS, 0);} // TODO use enum for account type
+            () -> {new SavingAccount(null, "Abhi", 0);}
         );
         assertEquals(
             "Account ID cannot be null or empty.", 
@@ -30,7 +34,7 @@ public class AccountTest{
     void constructorThrowsForInvalidName(){
         Exception exception = assertThrows(
             IllegalArgumentException.class,
-            () -> {new Account("w132", null, AccountType.SAVINGS, 0);} // TODO use enum for account type
+            () -> {new SavingAccount("w132", null, 0);}
         );
         assertEquals(
             "Account holder name cannot be null or empty.", 
@@ -42,7 +46,7 @@ public class AccountTest{
     void constructorThrowsForInvalidType(){
         Exception exception = assertThrows(
             IllegalArgumentException.class,
-            () -> {new Account("w132", "Abhi", null, 0);}
+            () -> {new SavingAccount("w132", "Abhi", 0);}
         );
         assertEquals(
             "Account type cannot be null or empty.", 

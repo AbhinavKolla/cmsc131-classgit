@@ -23,14 +23,14 @@ public class BankTest {
 
     @Test
     void testAddAccount() {
-        Account account = new Account("12346", "Billy Badass", AccountType.CHECKING, 10.0);
+        Account account = new SavingAccount("12346", "Billy Badass", 10.0);
         boolean result = bank.addAccount(account);
         assertEquals(true, result);
     }
 
     @Test
     void testAddAccountDuplicateID() {
-        Account duplicateAccount = new Account("wz240833", "Jane Doe", AccountType.SAVINGS, 500.0);
+        Account duplicateAccount = new SavingAccount("wz240833", "Jane Doe", 500.0);
         boolean result = bank.addAccount(duplicateAccount);
         assertEquals(false, result);
     }
@@ -49,7 +49,7 @@ public class BankTest {
 
     @Test
     void testWriteAccounts() {
-        Account account = new Account("12347", "John Smith", AccountType.SAVINGS, 200.0);
+        Account account = new SavingAccount("12347", "John Smith", 200.0);
         bank.addAccount(account);
         bank.writeAccounts(Bank.WRITE_FILE);
         Bank newBank = new Bank();
@@ -58,8 +58,21 @@ public class BankTest {
         // TODO check accounts in bank and newBank are the same
     }
 
-    // TODO loadAccounts failure mode
+    @Test
+    void testLoadAccountsFailureMode() {
+        Bank newBank = new Bank();
+        boolean result = newBank.loadAccounts("invalid_file.csv");
+        assertEquals(false, result);
+    }
+    
     // TODO loadAccounts preserves data
+    @Test
+    void testLoadAccountsPreservesData() {
+        Bank newBank = new Bank();
+        newBank.loadAccounts(Bank.READ_FILE);
+        assertEquals(bank.getAccounts(), newBank.getAccounts());
+        
+    }
     // TODO loadAccounts returns true on succeed
     // TODO writeAccounts failure mode
     // TODO writeAccounts returns true on succeed

@@ -8,16 +8,20 @@ public class Withdrawal extends Transaction {
 
     @Override
     public void execute(Account account) {
-        account.withdraw(amount);
+        account.withdraw(super.getAmount());
     }
 
     @Override 
     public boolean validate(Account account) {
-        if (account.getBalance()<amount){
-            return false;
-        else if(accpimt.getBalance()>=amount)
+        if (account.getBalance() >= super.getAmount() && super.getAmount() > 0) {
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public TransactionType getTransactionType() {
+        return TransactionType.WITHDRAWAL;
     }
 
 }

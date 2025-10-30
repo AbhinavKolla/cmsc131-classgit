@@ -7,28 +7,52 @@ abstract class Transaction {
 
     // abstract methods, to be overridden by subclasses
     
-    //TODO javadoc
+    /*
+     * Executes the transaction on the given account.
+     * @param account the account to execute the transaction on
+     */
     abstract void execute(Account account);
-    
-    // TODO javadoc
+
+    /*
+     * Validates the transaction against the given account.
+     * @param account the account to validate the transaction against
+     * @return true if the transaction is valid, false otherwise
+     */
     abstract boolean validate(Account account);
 
-    // concrete methods
-
-    // TODO javadoc
+    /*
+     * @param account the account to check
+     * @return true if the account has sufficient funds, false otherwise
+     */
+    boolean hasSufficientFunds(Account account) {
+        return account.getBalance() >= this.amount;
+    }
     protected Transaction(String accountID, double amount) {
-        this.accountID = accountID;
+        if(accountID != null){
+            this.accountID = accountID;
+        } else {
+            throw new IllegalArgumentException("Parameter accountID cannot be null.");
+        }
         this.amount = amount;
     }
 
-    //TODO JAVADOC
+    /*
+     * Creates a Transaction object from the given input line.
+     * @param inputLine the input line to parse
+     * @return a Transaction object
+     */
     protected static Transaction make(String inputLine) {
-        String[] tokens = inputLine.split();
+        if (inputLine == null) {
+            throw new IllegalArgumentException("Parameter inputLine cannot be null.");
+        }
 
-        if(tokens[0] = TransactionType.WITHDRAWAL)
-            return new Withdrawal(tokens[1], tokens[2]);
-        else if(tokens[0] = TransactionType.DEPOSIT)
-            return new Deposit(tokens[1], tokens[2]);
+        String[] tokens = inputLine.split(",");
+
+        if(tokens[0].equals(TransactionType.WITHDRAWAL.name())){
+            return new Withdrawal(tokens[1], Double.valueOf(tokens[2]));
+        } else {
+            return new Deposit(tokens[1], Double.valueOf(tokens[2]));
+        }
     }
 
 
@@ -36,6 +60,13 @@ abstract class Transaction {
         return this.accountID;
     }
 
+    public double getAmount() {
+        return this.amount;
+    }
 
+    /*
+     * @return the type of the transaction
+     */
+    abstract TransactionType getTransactionType();
 
 }

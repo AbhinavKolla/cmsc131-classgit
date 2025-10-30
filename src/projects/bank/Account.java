@@ -27,28 +27,32 @@ abstract class Account {
     }
 
     public static Account createAccount(String token) {
+        if(token == null){
+            throw new IllegalArgumentException("Parameter token cannot be null.");
+        }
+        
         String[] parts = token.split(",");
         AccountType type = AccountType.valueOf(parts[0].toUpperCase());
         String name = parts[2];
         String id = parts[1];
         double balance = Double.parseDouble(parts[3]); 
 
-        if(type==CheckingAccount.CHECKING)
+        if(type==AccountType.CHECKING)
             return new CheckingAccount(id, name, balance);
-        else if (type==CheckingAccount.SAVINGS)
+        else
             return new SavingAccount(id, name, balance);
     }
 
     public void deposit(double amount){
-        this.balance += amount;
+        this.accountBalance += amount;
     }
 
     public void withdraw(double amount){
-        this.balance -= amount;
+        this.accountBalance -= amount;
     }
 
     public String toString(){
-        return (toString(getAccountID), getAccountID(), getAccountHolderName(), getBalance());
+        return String.format("%s,%s,%s,%f", getAccountType().name(), getAccountID(), getAccountHolderName(), getBalance());
     }
 
     // Accessors
@@ -64,6 +68,6 @@ abstract class Account {
         return accountBalance;
     }
 
-    abstract AccountType getAccountType()
+    abstract AccountType getAccountType();
 }
     

@@ -8,12 +8,20 @@ public class Deposit extends Transaction {
 
     @Override
     public void execute(Account account) {
-        account.deposit(amount);
+        account.deposit(super.getAmount());
     }
 
     @Override 
     public boolean validate(Account account) {
+        if(super.getAmount() < 0) {
+            return false;
+        }
         return true;
+    }
+
+    @Override
+    public TransactionType getTransactionType() {
+        return TransactionType.DEPOSIT;
     }
 
 }

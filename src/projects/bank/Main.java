@@ -16,10 +16,9 @@ public class Main {
         try {
             FileWriter writer = new FileWriter(new File(logName));
 
-            Account acct = new Account(
+            Account acct = new SavingAccount(
                 "id1",
                 "Owner Name",
-                AccountType.SAVINGS,
                 1.0
             );
             
@@ -67,12 +66,12 @@ public class Main {
     public static void phase2() {
         String accountsFilename = "data/accounts.csv";
         Bank bank = new Bank();
-        boolean result = bank.loadAccounts(accountsFilename); // TODO input String
+        boolean result = bank.loadAccounts(Bank.READ_FILE);
 
         System.out.println("Result of loading account: " + result);
         System.out.println("Number of accounts: " + bank.getCount());
 
         String outputFilename = "data/phase2.csv";
-        bank.writeAccounts(outputFilename); // TODO input String
+        bank.writeAccounts(Bank.WRITE_FILE);
     }
 }

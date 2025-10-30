@@ -58,72 +58,75 @@ public class Bank {
         return count;
     }
 
-    /*
-     * Loads accounts from the CSV file into the bank.
-     * TODO description of input/output
-     * TODO input String not File
-     * TODO return boolean
+    /* Processes transactions from a CSV file.
+     * @param fileName The name of the file to read from.
+     * @return boolean indicating success or failure.
      */
-    public void loadAccounts(String fileName) {
+    public boolean processTransactions(String fileName) {
         try {
             File file = new File(fileName);
             Scanner scanner = new Scanner(file);
 
             while(scanner.hasNext()) {
                 Transaction trs = Transaction.make(scanner.nextLine());
-                int targetIdx = this.find(trs.getAccountID);
+                int targetIdx = this.findID(trs.getAccountID());
 
                 if(targetIdx>0){
                     Account target = accounts[targetIdx];
                     if(trs.validate(target))
                         trs.execute(target);
                 }
-
-                
             }
+            
             scanner.close();
-        }
-        catch (FileNotFoundException e) {
+            return true;
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    public void processTransactions(String fileName){
+    /* Loads accounts from a CSV file into the bank.
+     * @param fileName The name of the file to read from.
+     * @return boolean indicating success or failure.
+     */
+    public boolean loadAccounts(String fileName){
         try{
-        File file = new File(fileName);
-        Scanner scanner = new Scanner(file);
+            File file = new File(fileName);
+            Scanner scanner = new Scanner(file);
 
-        while(scanner.hasNext()) {
-                String token = scanner.nextLine();
-                this.addAccount(Account.createAccount(token));
-                
-            }
-
+            while(scanner.hasNext()) {
+                    String token = scanner.nextLine();
+                    this.addAccount(Account.createAccount(token));
+                    
+                }
+            scanner.close();
+            return true;
         } catch(FileNotFoundException e){
             e.printStackTrace();
         }
+        return false;
     }
 
-    // TODO javadoc
-    // TODO input String not FIle
-    // TODO return boolean
-    public void writeAccounts(String fileName){
+    /* Writes all accounts to a CSV file.
+     * @param fileName The name of the file to write to.
+     * @return boolean indicating success or failure.
+     */
+    public boolean writeAccounts(String fileName){
         try {
             File file = new File(fileName);
             FileWriter writer = new FileWriter(file);
             for (Account account : accounts){
                 if (account != null) {
-                    writer.write(account + "\n");
-                    // "\n" is okay because you're using a dev container 
-                    // running linux. instead, consider using 
-                    // System.lineSeparator() which is os-agnostic
+                    writer.write(account + System.lineSeparator());
+                    writer.flush();
                 }
             }
             writer.close();
-        } 
-        
-        catch (IOException e) {
+            return true;
+        } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -157,6 +160,10 @@ public class Bank {
             }
         }
         openSlot = -1;
+    }
+
+    public Account[] getAccounts() {
+        return accounts;
     }
 
 }
