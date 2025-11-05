@@ -14,8 +14,10 @@ public class Deposit extends Transaction {
     @Override 
     public boolean validate(Account account) {
         if(super.getAmount() < 0) {
+            audit.depositAmountNegative(this, account);
             return false;
         }
+        audit.recordTransaction(this, account);
         return true;
     }
 

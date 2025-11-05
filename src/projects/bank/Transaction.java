@@ -27,7 +27,7 @@ abstract class Transaction {
     boolean hasSufficientFunds(Account account) {
         return account.getBalance() >= this.amount;
     }
-    protected Transaction(String accountID, double amount) {
+    protected Transaction(String accountID, double amount, Audit audit) {
         if(accountID != null){
             this.accountID = accountID;
         } else {

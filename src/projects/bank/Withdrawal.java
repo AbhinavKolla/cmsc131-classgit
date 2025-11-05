@@ -2,8 +2,8 @@ package projects.bank;
 
 public class Withdrawal extends Transaction {
 
-    public Withdrawal(String accountID, double amount) {
-        super(accountID, amount);
+    public Withdrawal(String accountID, double amount, Audit audit) {
+        super(accountID, amount, audit);
     }
 
     @Override
@@ -14,8 +14,10 @@ public class Withdrawal extends Transaction {
     @Override 
     public boolean validate(Account account) {
         if (account.getBalance() >= super.getAmount() && super.getAmount() > 0) {
+            audit.recordTransaction(this, account);
             return true;
         }
+        audit.recordInsufficientFunds(this, account);
         return false;
     }
 

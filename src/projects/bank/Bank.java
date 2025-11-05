@@ -12,9 +12,7 @@ public class Bank {
 
     public static final String READ_FILE = ("data/accountsRead.csv");
     public static final String WRITE_FILE = ("data/accountsWrite.csv");
-    public static void main(String[] args) {
-        
-    }
+    public static final String AUDIT_FILE = ("data/audit.txt");
 
     public Bank() {
         accounts = new Account[500];
@@ -62,9 +60,10 @@ public class Bank {
      * @param fileName The name of the file to read from.
      * @return boolean indicating success or failure.
      */
-    public int processTransactions(String fileName) {
+    public int processTransactions(String fileName, String auditFileName){ 
         try {
             File file = new File(fileName);
+            Audit audit = new Audit(auditFileName);
             Scanner scanner = new Scanner(file);
             int processedCount = 0;
 
@@ -74,19 +73,21 @@ public class Bank {
 
                 if(targetIdx>=0){
                     Account target = accounts[targetIdx];
-                    if(trs.validate(target))
-                        trs.execute(target);
+                    if(trs.validate(target, audit))
+                        trs.execute(target, audit);
                         processedCount++;
-                }
+                
+
             }
-            
             scanner.close();
-            return processedCount;
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return 0;
+        
+        audit.close();
+        return processedCount;
+        }
     }
 
     /* Loads accounts from a CSV file into the bank.
