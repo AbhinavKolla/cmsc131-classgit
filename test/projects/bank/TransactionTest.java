@@ -22,6 +22,7 @@ public class TransactionTest {
         assertThrows(IllegalArgumentException.class, 
         () -> {new Withdrawal(null, 0);}
         );
+        // TODO check message
     }
 
     @Test
@@ -29,6 +30,7 @@ public class TransactionTest {
         assertThrows(IllegalArgumentException.class, 
         () -> {Transaction.make(null);}
         );
+        // TODO check message
     }
 
 
@@ -44,11 +46,13 @@ public class TransactionTest {
     @Test
     void testValidateDeposit() {
         assertTrue(defaultDeposit.validate(ckgAccount));
+        // TODO check validation failure
     }
 
     @Test
     void testValidateWithdrawal() {
         assertTrue(defaultWithdrawal.validate(ckgAccount));
+        // TODO check validation failure
     }
 
     @Test
@@ -60,5 +64,7 @@ public class TransactionTest {
     void testExecuteWithdrawal() {
         assertDoesNotThrow(() -> defaultWithdrawal.execute(ckgAccount));
     }
+
+    // TODO test execution changes balance as expected
 
 }
