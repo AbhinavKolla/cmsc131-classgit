@@ -1,3 +1,7 @@
+/** TODO list
+ * move amount validation into constructor
+ * don't need to reference super for inherited methods like getAmount
+ */
 package projects.bank;
 
 public class Withdrawal extends Transaction {

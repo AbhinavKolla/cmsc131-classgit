@@ -1,3 +1,7 @@
+/** TODO LIST
+ * move amount validation logic into constructor, just return true
+ * don't need to reference super for inherited methods like getAmount
+ */
 package projects.bank;
 
 public class Deposit extends Transaction {

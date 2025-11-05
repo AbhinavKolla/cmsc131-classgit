@@ -1,3 +1,7 @@
+/** TODO LIST
+ * 
+ * TODO have some kind of error message for no-such-account. will be replaced by auditing anyway.
+ */
 package projects.bank;
 
 import java.util.Scanner;
@@ -60,17 +64,15 @@ public class Bank {
      * @param fileName The name of the file to read from.
      * @return boolean indicating success or failure.
      */
-    public int processTransactions(String fileName, String auditFileName){ 
+    public int processTransactions(String fileName) {
+        int processedCount = 0;
         try {
             File file = new File(fileName);
             Audit audit = new Audit(auditFileName);
             Scanner scanner = new Scanner(file);
-            int processedCount = 0;
-
             while(scanner.hasNext()) {
                 Transaction trs = Transaction.make(scanner.nextLine());
                 int targetIdx = this.findID(trs.getAccountID());
-
                 if(targetIdx>=0){
                     Account target = accounts[targetIdx];
                     if(trs.validate(target, audit))
@@ -80,14 +82,11 @@ public class Bank {
 
             }
             scanner.close();
-
+            return processedCount;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        
-        audit.close();
         return processedCount;
-        }
     }
 
     /* Loads accounts from a CSV file into the bank.

@@ -1,3 +1,9 @@
+/** TODO list
+ * javadoc for constructor
+ * consider validating `amount` in constructor
+ * you can assume there'll be 3 tokens when parsing `inputLine` in make
+ * consider using TransactionType.valueOf instead of comparing strings in make. otherwise your logic could return a Deposit when it ought to raise an exception
+ */
 package projects.bank;
 
 abstract class Transaction {
