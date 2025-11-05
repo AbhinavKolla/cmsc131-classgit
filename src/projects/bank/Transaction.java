@@ -34,12 +34,15 @@ abstract class Transaction {
         return account.getBalance() >= this.amount;
     }
     protected Transaction(String accountID, double amount, Audit audit) {
-        if(accountID != null){
-            this.accountID = accountID;
-        } else {
+        if(accountID == null){
             throw new IllegalArgumentException("Parameter accountID cannot be null.");
+        } else if(amount < 0){
+            throw new IllegalArgumentException("Parameter amount cannot be negative.");
         }
+
+        this.accountID = accountID;
         this.amount = amount;
+        
     }
 
     /*

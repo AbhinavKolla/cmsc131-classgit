@@ -13,6 +13,7 @@ public class Deposit extends Transaction {
     @Override
     public void execute(Account account) {
         account.deposit(super.getAmount());
+        audit.recordTransaction(this, account);
     }
 
     @Override 
@@ -21,7 +22,6 @@ public class Deposit extends Transaction {
             audit.depositAmountNegative(this, account);
             return false;
         }
-        audit.recordTransaction(this, account);
         return true;
     }
 

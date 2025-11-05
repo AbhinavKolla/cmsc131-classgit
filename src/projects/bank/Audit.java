@@ -65,14 +65,6 @@ public class Audit{
         ));
     }
 
-    public void depositAmountNegative(Transaction t, Account a){
-        write(String.format("%s ERROR deposit amount negative: %s, account balance is %.2f",
-            Utils.timestamp(),
-            t.toString(),
-            a.getBalance()
-        ));
-    }
-
     /*
     * Records a successful transaction execution.
     * @param t The transaction to record.
