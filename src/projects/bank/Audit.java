@@ -1,3 +1,8 @@
+package projects.bank;
+
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Audit{
 
     private FileWriter writer;
@@ -9,7 +14,7 @@ public class Audit{
     */
     public Audit(String filename) throws IOException{
         if(filename == null){
-            throw new IllegalArgumentException("Filename cannot be null or empty");
+            throw new IOException("Filename cannot be null or empty");
         }
         writer = new FileWriter(filename);
     }
@@ -48,7 +53,7 @@ public class Audit{
     public void recordNoSuchAccount(Transaction t){
         write(String.format("%s ERROR no such account: %s",
             Utils.timestamp(),
-            t.toString();
+            t.toString()
         ));
     }
 
@@ -70,10 +75,10 @@ public class Audit{
     * @param t The transaction to record.
     * @param a The account associated with the transaction.
     */
-    public void recordExecute(Transactiont t, Account a){
+    public void recordExecute(Transaction t, Account a){
         write(String.format("%s INFO: %s, account balance is now: %s",
             Utils.timestamp(),
-            t.toString()
+            t.toString(),
             a.getBalance()
         ));
     }

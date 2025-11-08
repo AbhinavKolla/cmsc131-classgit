@@ -9,28 +9,40 @@ public class TransactionTest {
 
     private Account ckgAccount;
     private Transaction defaultDeposit, defaultWithdrawal;
+    private Audit audit;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         ckgAccount = new CheckingAccount("id", "owner", 10.0);
         defaultDeposit = new Deposit("id", 2.51);
         defaultWithdrawal = new Withdrawal("id", 1.75);
+        audit = new Audit("data/audit.txt");
     }
 
     @Test
-    void testConstructorDataValidation() {
-        assertThrows(IllegalArgumentException.class, 
-        () -> {new Withdrawal(null, 0);}
+    void testConstructorAccountIDValidation() {
+        Exception e = assertThrows(
+            IllegalArgumentException.class, 
+            () -> {new Withdrawal(null, 0);}
         );
-        // TODO check message
+        assertEquals("Parameter accountID cannot be null.", e.getMessage());
+    }
+
+    @Test
+    void testConstructorAmountValidation() {
+        Exception e = assertThrows(
+            IllegalArgumentException.class, 
+            () -> {new Withdrawal("id", -1.0);}
+        );
+        assertEquals("Parameter amount cannot be negative.", e.getMessage());
     }
 
     @Test
     void testMakeThrowsOnNullInput() {
-        assertThrows(IllegalArgumentException.class, 
+        Exception e = assertThrows(IllegalArgumentException.class, 
         () -> {Transaction.make(null);}
         );
-        // TODO check message
+        assertEquals("Parameter inputLine cannot be null.", e.getMessage());
     }
 
 
@@ -45,26 +57,36 @@ public class TransactionTest {
 
     @Test
     void testValidateDeposit() {
-        assertTrue(defaultDeposit.validate(ckgAccount));
-        // TODO check validation failure
+        assertTrue(defaultDeposit.validate(ckgAccount, audit));
+        // TODO check validation failure: shouldn't this always return true?
     }
 
     @Test
     void testValidateWithdrawal() {
-        assertTrue(defaultWithdrawal.validate(ckgAccount));
-        // TODO check validation failure
+        assertTrue(defaultWithdrawal.validate(ckgAccount, audit));
+    }
+
+    @Test
+    void testValidateWithdrawalFailure() {
+        Account overdrawnAccount = new CheckingAccount("id", "owner", -1.0);
+        assertFalse(defaultWithdrawal.validate(overdrawnAccount, audit));
     }
 
     @Test
     void testExecuteDeposit() {
-        assertDoesNotThrow(() -> defaultDeposit.execute(ckgAccount));
+        assertDoesNotThrow(() -> defaultDeposit.execute(ckgAccount, audit));
     }
 
     @Test
     void testExecuteWithdrawal() {
-        assertDoesNotThrow(() -> defaultWithdrawal.execute(ckgAccount));
+        assertDoesNotThrow(() -> defaultWithdrawal.execute(ckgAccount, audit));
     }
 
-    // TODO test execution changes balance as expected
+    @Test
+    void testExecuteDepositChangesBalance() {
+        double initialBalance = ckgAccount.getBalance();
+        defaultDeposit.execute(ckgAccount, audit);
+        assertEquals(initialBalance + defaultDeposit.getAmount(), ckgAccount.getBalance());
+    }
 
 }

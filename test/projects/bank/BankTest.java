@@ -98,13 +98,13 @@ public class BankTest {
 
      @Test
     void testProcessTransactionsFailure() {
-        int result = bank.processTransactions("not/a/file.csv");
+        int result = bank.processTransactions("not/a/file.csv", Bank.AUDIT_FILE);
         assertEquals(result, 0);
     }
 
     @Test
     void testProcessTransactionsSuccess() {
-        int result = bank.processTransactions("data/testtransactions.csv");
+        int result = bank.processTransactions("data/testtransactions.csv", Bank.AUDIT_FILE);
         assertEquals(result, 4);
     }
 

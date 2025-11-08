@@ -1,7 +1,3 @@
-/** TODO LIST
- * 
- * TODO have some kind of error message for no-such-account. will be replaced by auditing anyway.
- */
 package projects.bank;
 
 import java.util.Scanner;
@@ -10,7 +6,7 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class Bank {
+public class Bank{
     private Account[] accounts;
     private int openSlot;
 
@@ -64,7 +60,7 @@ public class Bank {
      * @param fileName The name of the file to read from.
      * @return boolean indicating success or failure.
      */
-    public int processTransactions(String fileName) {
+    public int processTransactions(String fileName, String auditFileName) {
         int processedCount = 0;
         try {
             File file = new File(fileName);
@@ -78,12 +74,17 @@ public class Bank {
                     if(trs.validate(target, audit))
                         trs.execute(target, audit);
                         processedCount++;
-                
-
+                }
+                else {
+                    audit.recordNoSuchAccount(trs);
+                }
             }
             scanner.close();
-            return processedCount;
+            audit.close();
+
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return processedCount;

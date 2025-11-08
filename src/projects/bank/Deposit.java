@@ -1,7 +1,3 @@
-/** TODO LIST
- * move amount validation logic into constructor, just return true
- * don't need to reference super for inherited methods like getAmount
- */
 package projects.bank;
 
 public class Deposit extends Transaction {
@@ -11,17 +7,13 @@ public class Deposit extends Transaction {
     }
 
     @Override
-    public void execute(Account account) {
-        account.deposit(super.getAmount());
-        audit.recordTransaction(this, account);
+    public void execute(Account account, Audit audit) {
+        account.deposit(getAmount());
+        audit.recordExecute(this, account);
     }
 
     @Override 
-    public boolean validate(Account account) {
-        if(super.getAmount() < 0) {
-            audit.depositAmountNegative(this, account);
-            return false;
-        }
+    public boolean validate(Account account, Audit audit) {
         return true;
     }
 

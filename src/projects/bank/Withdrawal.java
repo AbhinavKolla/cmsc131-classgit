@@ -1,24 +1,21 @@
-/** TODO list
- * move amount validation into constructor
- * don't need to reference super for inherited methods like getAmount
- */
+
 package projects.bank;
 
 public class Withdrawal extends Transaction {
 
-    public Withdrawal(String accountID, double amount, Audit audit) {
-        super(accountID, amount, audit);
+    public Withdrawal(String accountID, double amount) {
+        super(accountID, amount);
     }
 
     @Override
-    public void execute(Account account) {
-        account.withdraw(super.getAmount());
+    public void execute(Account account, Audit audit) {
+        account.withdraw(getAmount());
+        audit.recordExecute(this, account);
     }
 
     @Override 
-    public boolean validate(Account account) {
-        if (account.getBalance() >= super.getAmount() && super.getAmount() > 0) {
-            audit.recordTransaction(this, account);
+    public boolean validate(Account account, Audit audit) {
+        if (account.getBalance() >= getAmount()) {
             return true;
         }
         audit.recordInsufficientFunds(this, account);
