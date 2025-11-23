@@ -6,9 +6,9 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        
         phase1();
-        
+        phase2();
+        phases3and4();        
     }
 
     public static void phase1() {
@@ -73,5 +73,14 @@ public class Main {
 
         String outputFilename = "data/phase2.csv";
         bank.writeAccounts(Bank.WRITE_FILE);
+    }
+
+    public static void phases3and4() {
+        Bank bank = new Bank();
+        bank.loadAccounts("data/accountsRead.csv"); // ignore output
+        int step2 = bank.processTransactions("data/transactions.csv", "data/audit.log");
+        boolean step3 = bank.writeAccounts("data/accountsWrite.csv");
+        System.out.println("Transactions processed: " + step2);
+        System.out.println("Accounts write: " + step3);
     }
 }
