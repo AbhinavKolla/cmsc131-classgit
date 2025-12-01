@@ -11,11 +11,11 @@ public class MazeReader {
      * Assmes existence of CellStatus enum with values S, O, E.
      * Assumes existence of discoverAndSetupNeighbors instance method for Maze.
      * @param filename
-     * @return
+     * @return 
      */
     public static Maze load(String filename) {
         Scanner scanner;
-        int spaceCount = countSpacesIn( filename );
+        int spaceCount = countSpacesIn(filename);
         if (spaceCount == 0) {
             return null;
         }
@@ -25,10 +25,11 @@ public class MazeReader {
             int row = 0, col = 0;
             while (scanner.hasNextLine()) {
                 col = 0; // row begins with first column
-                String[] tokens = scanner.nextLine().split(",");
+                String line = scanner.nextLine(); 
+                String[] tokens = line.split(",");
                 for (int i = 0; i < tokens.length; i++) {
                     if (!tokens[i].equals("X")) {
-                        maze.insertCell(
+                        maze.addCell(
                             new Cell(
                                 new Coords(row, col),
                                 CellStatus.valueOf(tokens[i]) 

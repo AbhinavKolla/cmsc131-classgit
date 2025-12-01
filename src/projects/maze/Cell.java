@@ -1,3 +1,5 @@
+package projects.maze;
+
 /** `Cell` class additions
 
 Extra attributes
@@ -19,18 +21,29 @@ Extra attributes
 A cell will be constructed with a coordinates and a status. Decide for yourself what are sensible default values (if any) for the other attributes.
  */
 
-package projects.maze;
-
 public class Cell {
 
     private final Coords coords;
+    private final CellStatus status;
 
-    public Cell(Coords c) {
+    
+    /**
+     * Creates a new Cell with the given coordinates and status.
+     *
+     * @param c the coordinates of this cell
+     * @param status the initial status of this cell
+     */
+    public Cell(Coords c, CellStatus status) {
         coords = c;
+        this.status = status;
     }
 
     public Coords getCoords() {
         return coords;
+    }
+
+    public CellStatus getStatus() {
+        return status;
     }
 
 }

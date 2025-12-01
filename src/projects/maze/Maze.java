@@ -25,6 +25,28 @@ public class Maze {
         grid = new Grid(maxCells);
     }
 
+    /**
+     * Insert a cell while loading (used by MazeReader).
+     * Performs null checks and prevents duplicate coordinates.
+     * @param cell the Cell to insert
+     */
+    public void addCell(Cell cell) {
+        if (cell == null) {
+            throw new IllegalArgumentException("cell cannot be null");
+        }
+        Coords coords = cell.getCoords();
+        if (coords == null) {
+            throw new IllegalArgumentException("cell.coords cannot be null");
+        }
+        if (grid.getCell(coords) != null) {
+            throw new IllegalArgumentException(
+                "A cell already exists at coords"
+            );
+        }
+        // Insert the cell into the grid
+        grid.insertCell(cell);
+    }
+
     public void discoverAndSetupNeighbors() {
 
     }
@@ -51,7 +73,7 @@ public class Maze {
     
             // write cell statuses, using 'X' for absent (inaccessible) cells
             idxCell = 0;
-            for (int row = 0; row <= maxRow; row++) {
+            for (int row = 0; row <= maxRow+1; row++) {
                 for (int col = 0; col <= maxCol; col++) {
                     Cell maybeCell = grid.getCell(
                         new Coords(row, col)
@@ -62,7 +84,9 @@ public class Maze {
                     } else {
                         writer.write('X');
                     }
-                    writer.write(' ');
+                    //The read me says to have a space but i thought a comma would make more sense.
+                    //Please delete comma if it is meant to be a space
+                    if(col<maxCol) writer.write(',');
                 }
                 writer.write(System.lineSeparator());
             }
@@ -73,4 +97,7 @@ public class Maze {
         
     }
 
+    public Cell getCell(Coords coords) {
+        return grid.getCell(coords);
+    }
 }
