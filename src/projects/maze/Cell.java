@@ -25,7 +25,7 @@ public class Cell {
 
     private final Coords coords;
     private final CellStatus status;
-
+    // TODO add neighbors, explored. see class repo
     
     /**
      * Creates a new Cell with the given coordinates and status.

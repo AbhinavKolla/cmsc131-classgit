@@ -5,7 +5,7 @@ public class Grid {
     private final Cell[] cells;
     private int cellCount;
 
-    /* Constructor for Grid class
+    /** Constructor for Grid class
      * @param maxCells the maximum number of cells the grid can hold
      */
     public Grid(int maxCells) {
@@ -13,7 +13,7 @@ public class Grid {
         cellCount = 0;
     }
 
-    /*
+    /**
      * Inserts a new cell into the grid.
      * @param cell the Cell to insert
      * @return true if the cell was inserted successfully, false if the grid is full
