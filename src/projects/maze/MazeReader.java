@@ -6,16 +6,14 @@ import java.util.Scanner;
 
 public class MazeReader {
 
-    /**
-     * Provided by Dusel. 
-     * Assmes existence of CellStatus enum with values S, O, E.
-     * Assumes existence of discoverAndSetupNeighbors instance method for Maze.
-     * @param filename
-     * @return 
-     */
     public static Maze load(String filename) {
+        if (filename == null) {
+            throw new IllegalArgumentException(
+                "Parameter filename cannot be null"
+            );
+        }
         Scanner scanner;
-        int spaceCount = countSpacesIn(filename);
+        int spaceCount = countSpacesIn( filename );
         if (spaceCount == 0) {
             return null;
         }
@@ -25,11 +23,10 @@ public class MazeReader {
             int row = 0, col = 0;
             while (scanner.hasNextLine()) {
                 col = 0; // row begins with first column
-                String line = scanner.nextLine(); 
-                String[] tokens = line.split(",");
+                String[] tokens = scanner.nextLine().split(",");
                 for (int i = 0; i < tokens.length; i++) {
                     if (!tokens[i].equals("X")) {
-                        maze.addCell(
+                        maze.insertCell(
                             new Cell(
                                 new Coords(row, col),
                                 CellStatus.valueOf(tokens[i]) 

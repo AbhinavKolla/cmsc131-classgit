@@ -1,1 +1,1 @@
-2025-11-24@20:07:43 ERROR insufficient funds: projects.bank.Withdrawal@7d8995e, but account balance is 500.00
+2025-12-10@17:17:14 ERROR insufficient funds: projects.bank.Withdrawal@3b69e7d1, but account balance is 500.00

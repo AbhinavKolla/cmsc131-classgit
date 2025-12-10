@@ -1,21 +1,10 @@
-/** Maze class specification
-
-- `Maze(int maxCells)` - pre-allocates array to maximum size
-
-- `getStart()` - finds and returns the cell with Status Start
-
-- `getEnd()` - finds and returns the cell with Status End
-    - Consider writing a helper method `getFirstCellWithStatus(Status)` which does linear search
-
-- setupNeighbors() populates the neighbors list of each cell in the grid
-
- */
-
 package projects.maze;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import javax.swing.plaf.TreeUI;
 
 public class Maze {
 
@@ -26,37 +15,103 @@ public class Maze {
     }
 
     /**
-     * Insert a cell while loading (used by MazeReader).
-     * Performs null checks and prevents duplicate coordinates.
-     * @param cell the Cell to insert
+     * Alias for {@code grid::getAllCells} for underlying grid.
+     * @return Array of all cells in this maze, without {@code null} elements.
      */
-    public void addCell(Cell cell) {
-        if (cell == null) {
-            throw new IllegalArgumentException("cell cannot be null");
-        }
-        Coords coords = cell.getCoords();
-        if (coords == null) {
-            throw new IllegalArgumentException("cell.coords cannot be null");
-        }
-        if (grid.getCell(coords) != null) {
-            throw new IllegalArgumentException(
-                "A cell already exists at coords"
-            );
-        }
-        // Insert the cell into the grid
-        grid.insertCell(cell);
+    public Cell[] getAllCells() {
+        return grid.getAllCells();
     }
 
-    public void discoverAndSetupNeighbors() {
+    private Cell getFirstCellWithStatus(CellStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException(
+                "Parameter status cannot be null"
+            );
+        }
+        Cell[] cells = grid.getAllCells();
+        for (int idx = 0; idx < cells.length; idx++) {
+            if (cells[idx].getStatus() == status) {
+                return cells[idx];
+            }
+        }
+        return null;
+    }
 
+    private Cell getEnd() {
+        return getFirstCellWithStatus(CellStatus.E);
+    }
+
+    private Cell getStart() {
+        return getFirstCellWithStatus(CellStatus.S);
     }
 
     /**
-     * Provided by Dusel. Assumes grid cell has a getStatus() method.
-     * @param filename - Output filename.
+     * Alias for this maze's underlying grid::insertCell.
+     * @param cell Cell to be inserted.
+     * @return true if and only insertion is successful.
      */
-    public void serialize(String filename) {
+    public boolean insertCell(Cell cell) {
+        if (cell == null) {
+            throw new IllegalArgumentException(
+                "Parameter cell cannot be null"
+            );
+        }
+        return grid.insertCell(cell);
+    }
+
+    /**
+     * This method is public for testing purposes only. 
+     * See javadoc for {@code Maze::discoverAndSetupNeighbors}
+     * @param cell Not validated, due to usage in discoverAndSetupNeighbors.
+     * @return Array containing coordinates of neighbor cells in this maze.
+     */
+    public Coords[] discoverNeighbors(Cell cell) {
+        if (cell == null) {
+            throw new IllegalArgumentException(
+                "Parameter cell cannot be null"
+            );
+        }
+        Coords coords = cell.getCoords();
+        Coords[] potentialNeighbors = {
+            new Coords(coords.getRow() - 1, coords.getCol()), // north
+            new Coords(coords.getRow() + 1, coords.getCol()), // south
+            new Coords(coords.getRow(), coords.getCol() + 1), // east
+            new Coords(coords.getRow(), coords.getCol() - 1) // west
+        };
+        Coords[] neighbors = new Coords[potentialNeighbors.length];
+        int neighborsCount = 0;
+        for (Coords offset : potentialNeighbors) {
+            if (grid.getCell(offset) != null) {
+                neighbors[neighborsCount++] = offset;
+            }
+        }
+        Coords[] toReturn = new Coords[neighborsCount];
+        for (int idx = 0; idx < neighborsCount; idx++) { // trim nulls
+            toReturn[idx] = neighbors[idx];
+        }
+        return toReturn;
+    }
+
+    /**
+     * Populates {@code neighbors} attribute of each cell in this maze's 
+     * underlying grid. Neighbor cells are scanned in NSEW order.
+     */
+    public void discoverAndSetupNeighbors() {
         Cell[] cells = grid.getAllCells();
+        for (int idxCell = 0; idxCell < cells.length; idxCell++) {
+            Cell cell = cells[idxCell];
+            Coords[] neighbors = discoverNeighbors(cell);
+            cell.setNeighbors(neighbors);
+        }
+    }
+
+    public void serialize(String filename) {
+        if (filename == null) {
+            throw new IllegalArgumentException(
+                "Parameter filename cannot be null"
+            );
+        }
+        Cell[] cells = getAllCells();
 
         FileWriter writer;
         try {
@@ -73,7 +128,7 @@ public class Maze {
     
             // write cell statuses, using 'X' for absent (inaccessible) cells
             idxCell = 0;
-            for (int row = 0; row <= maxRow+1; row++) {
+            for (int row = 0; row <= maxRow; row++) {
                 for (int col = 0; col <= maxCol; col++) {
                     Cell maybeCell = grid.getCell(
                         new Coords(row, col)
@@ -84,9 +139,7 @@ public class Maze {
                     } else {
                         writer.write('X');
                     }
-                    //The read me says to have a space but i thought a comma would make more sense.
-                    //Please delete comma if it is meant to be a space
-                    if(col<maxCol) writer.write(',');
+                    writer.write(' ');
                 }
                 writer.write(System.lineSeparator());
             }
@@ -97,7 +150,48 @@ public class Maze {
         
     }
 
-    public Cell getCell(Coords coords) {
-        return grid.getCell(coords);
+    public void leadsToExit() {
+        dfs(getStart());
     }
+
+    private boolean dfs(Cell c){
+        c.setExplored(true);
+
+        if(c.getStatus() == CellStatus.E)
+            return true;
+        else if(c.getStatus() == CellStatus.O)
+            c.setStatus(CellStatus.P);
+        for (Coords coords : c.getNeighbors()) {
+            Cell neighbor = grid.getCell(coords);
+            if(!neighbor.isExplored()){
+                if(dfs(neighbor)){
+                    return true;
+                }
+            }
+        }
+        
+        c.setStatus(CellStatus.O);
+        return false;
+    }
+
 }
+
+/*
+Cell c = this.getStart();
+        c.setExplored(true);
+
+        if(c.getStatus() == CellStatus.E)
+            return true;
+        else if(c.getStatus() == CellStatus.O)
+            c.setStatus(CellStatus.P);
+        for (Coords coords : c.getNeighbors()) {
+            Cell neighbor = grid.getCell(coords);
+            if(!neighbor.isExplored()){
+                if(neighbor.findPathToExit(neighbor)){
+                    return true;
+                }
+            }
+        }
+        c.setStatus(CellStatus.O);
+        return false;
+*/

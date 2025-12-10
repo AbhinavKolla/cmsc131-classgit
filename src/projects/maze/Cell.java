@@ -1,49 +1,58 @@
 package projects.maze;
 
-/** `Cell` class additions
-
-Extra attributes
-
-- `neighbors` (Coords[]) - coordinates of neighbors
-    - needs accessor/mutator
-
-- `explored` (boolean) - traversal flag (defaults to false)
-    - needs accessor/mutator
-
-- `status` (CellStatus enum) - cell's role/state
-    - Enum values    
-        - `S` maze entrance
-        - `E` maze exit  
-        - `O` open cell
-        - `P` part of solution path
-    - Needs accessor/mutator
-
-A cell will be constructed with a coordinates and a status. Decide for yourself what are sensible default values (if any) for the other attributes.
- */
-
 public class Cell {
 
     private final Coords coords;
-    private final CellStatus status;
-    // TODO add neighbors, explored. see class repo
-    
+    private Coords[] neighbors;
+    private boolean explored;
+    private CellStatus status;
+
     /**
-     * Creates a new Cell with the given coordinates and status.
-     *
-     * @param c the coordinates of this cell
-     * @param status the initial status of this cell
+     * Construct a new cell from the given coordinates and cell status. 
+     * Defaults to unexplored state.
+     * @param c Coordinates of this cell
+     * @param s Status of this cell
      */
-    public Cell(Coords c, CellStatus status) {
+    public Cell(Coords c, CellStatus s) {
+        if (c == null) {
+            throw new IllegalArgumentException("Parameter c cannot be null");
+        }
+        if (s == null) {
+            throw new IllegalArgumentException("Parameter s cannot be null");
+        }
         coords = c;
-        this.status = status;
+        explored = false;
+        status = s;
     }
 
     public Coords getCoords() {
         return coords;
     }
 
+    public boolean isExplored() {
+        return explored;
+    }
+
+    public void setExplored(boolean updateExplored) {
+        explored = updateExplored;
+    }
+    
+    public Coords[] getNeighbors() {
+        return neighbors;
+    }
+
+    public void setNeighbors(Coords[] neighbors) {
+        this.neighbors = neighbors;
+    }
+    
     public CellStatus getStatus() {
         return status;
     }
+
+    public void setStatus(CellStatus updateStatus) {
+        status = updateStatus;
+    }
+
+
 
 }

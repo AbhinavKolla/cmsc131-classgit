@@ -1,59 +1,85 @@
 package projects.maze;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MazeTest {
+    private Maze maze;
+
+    @BeforeEach
+    /**
+     * X,S,X,X
+     * X,O,O,E
+     * X,O,X,X
+     */
+    void setup() {
+        String sourceOfTruth = "data/test_maze.txt"; //
+        maze = MazeReader.load(sourceOfTruth);
+    }
+
+    @Test
+    void testLoadedMaze(){
+        Cell[] allCells = maze.getAllCells();
+        assertEquals(5, allCells.length);
+        Coords[] cellCoords = {
+            new Coords(0, 1),
+            new Coords(1, 1), new Coords(1, 2), new Coords(1, 3), 
+            new Coords(2, 1)
+        };
+        CellStatus[] cellStatuses = {
+            CellStatus.S,
+            CellStatus.O, CellStatus.O, CellStatus.E,
+            CellStatus.O
+        };
+        for (int idx = 0; idx < allCells.length; idx++) {
+            Cell cell = allCells[idx];
+            assertTrue(cell.getCoords().equals(cellCoords[idx]));
+            assertEquals(cell.isExplored(), false);
+            assertEquals(cell.getStatus(), cellStatuses[idx]);
+        }
+    }
     
     @Test
-    public void addNullCell() {
-        Maze maze = new Maze(10);
-        IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> maze.addCell(null)
+    void testDiscoverNeighbors(){
+        Coords[] expected = { // NSEW ordering like Maze::discoverNeighbors
+            new Coords(0, 1), 
+            new Coords(2, 1),
+            new Coords(1, 2),
+        };
+        Coords[] actual = maze.discoverNeighbors(
+            new Cell(
+                new Coords(1, 1), 
+                CellStatus.O
+            )
         );
-        assertEquals("cell cannot be null", ex.getMessage());
+        assertEquals(expected.length, actual.length);
+        for (int idx = 0; idx < expected.length; idx++){
+            assertTrue(expected[idx].equals(actual[idx]));
+        }
     }
 
     @Test
-    public void addNullCellCoords() {
-        Maze maze = new Maze(10);
-        IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> maze.addCell(new Cell(null, null))
-        );
-        assertEquals("cell.coords cannot be null", ex.getMessage());
+    /**
+     * Maze::getAllCells is supposed to trim nulls from the end of its grid
+     */
+    void testGetAllCells(){
+        Maze testMaze = new Maze(2);
+        Cell testCell = new Cell(new Coords(0, 0), CellStatus.O);
+        testMaze.insertCell(testCell);
+        assertEquals(1, testMaze.getAllCells().length);
+        assertEquals(testCell, testMaze.getAllCells()[0]);
     }
 
+    /*TODO LIST
+        -test for outcome for when only E
+        -outcome when there is only an S
+        -recursive issue when there is an S and an E
+        -Test maze and check if the Ps are in the right 
+    */
+    
     @Test
-    public void addCellExistingAtCoords() {
-        Maze maze = new Maze(10);
-        maze.addCell(new Cell(new Coords(0, 0),null));
-        IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> maze.addCell(new Cell(new Coords(0, 0), null))
-        );
-        assertEquals("A cell already exists at coords", ex.getMessage());
+    void testReturnTrueForE(){
+        Maze testMaze = new Maze
     }
-
-    @Test void serializeMaze() throws FileNotFoundException {
-        Maze maze = new Maze(10);
-        maze.addCell(new Cell(new Coords(0, 0), CellStatus.S));
-        maze.addCell(new Cell(new Coords(1, 0), CellStatus.E));
-        maze.addCell(new Cell(new Coords(0, 1), CellStatus.P));
-        maze.addCell(new Cell(new Coords(1, 1), CellStatus.P));
-        maze.serialize("test/projects/maze/testMaze.txt");
-        // Verify the contents of the file
-        Scanner scanner = new Scanner(new File("test/projects/maze/testMaze.txt"));
-        String line = scanner.nextLine();
-        assertEquals("S,P", line);
-        line = scanner.nextLine();
-        assertEquals("E,P", line);
-        scanner.close();
-    }
-
 }

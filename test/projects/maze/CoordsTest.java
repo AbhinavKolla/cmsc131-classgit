@@ -1,41 +1,21 @@
 package projects.maze;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
-public class Coords    public Coords(int row, int col) {
-        //TODO Auto-generated constructor stub
-    }
-
-@Test
-    public void testEqualsSameValues() {
-        Coords a = new Coords(0, 0);
-        Coords b = new Coords(0, 0);
-        assertTrue(a.equals(b));
-        assertTrue(b.equals(a));
-    }
-
+public class CoordsTest {
     @Test
-    public void testEqualsDifferentRow() {
-        Coords a = new Coords(1, 2);
-        Coords b = new Coords(2, 2);
-        assertFalse(a.equals(b));
-    }
+    void testEquals() {
+        Coords c1 = new Coords(6, 7);
+        Coords c2 = c1;
+        Coords c3 = new Coords(6, 7);
+        Coords c4 = new Coords(6, 8);
 
-    @Test
-    public void testEqualsDifferentCol() {
-        Coords a = new Coords(1, 2);
-        Coords b = new Coords(1, 3);
-        assertFalse(a.equals(b));
-    }
-
-    public int getRow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRow'");
-    }
-
-    public int getCol() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCol'");
+        assertTrue(c1.equals(c1)); // reflexive
+        assertTrue(c1.equals(c2)); // alias
+        assertTrue(c1.equals(c3));
+        assertFalse(c1.equals(c4));
+        assertFalse(c2.equals(c4));
+        assertFalse(c3.equals(c4));
     }
 }
