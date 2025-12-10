@@ -1,5 +1,6 @@
 package projects.maze;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ public class MazeTest {
     void setup() {
         String sourceOfTruth = "data/test_maze.txt"; //
         maze = MazeReader.load(sourceOfTruth);
+        maze.discoverAndSetupNeighbors();
     }
 
     @Test
@@ -71,15 +73,48 @@ public class MazeTest {
         assertEquals(testCell, testMaze.getAllCells()[0]);
     }
 
-    /*TODO LIST
-        -test for outcome for when only E
-        -outcome when there is only an S
-        -recursive issue when there is an S and an E
-        -Test maze and check if the Ps are in the right 
-    */
-    
     @Test
     void testReturnTrueForE(){
-        Maze testMaze = new Maze
+        Maze testMaze = new Maze(2);
+
+        testMaze.insertCell(new Cell(new Coords(0,0), CellStatus.S));
+        testMaze.insertCell(new Cell(new Coords(0,1), CellStatus.E));
+        testMaze.discoverAndSetupNeighbors();
+        
+        assertTrue(testMaze.leadsToExit());
+
+    }
+
+    @Test
+    void testReturnFalseForNoE(){
+        Maze testMaze = new Maze(2);
+
+        testMaze.insertCell(new Cell(new Coords(0,0), CellStatus.S));
+        testMaze.insertCell(new Cell(new Coords(0,1), CellStatus.O));
+        testMaze.discoverAndSetupNeighbors();
+
+        assertFalse(testMaze.leadsToExit());
+
+    }
+
+    @Test
+    void testCorrectPathFound(){
+        maze.leadsToExit();
+        Cell[] newGrid = maze.getAllCells();
+        Cell[] correctGrid = {
+            new Cell(new Coords(0, 1), CellStatus.S),
+            new Cell(new Coords(1, 1), CellStatus.P),
+            new Cell(new Coords(1, 2), CellStatus.P),
+            new Cell(new Coords(1, 3), CellStatus.E),
+            new Cell(new Coords(2, 1), CellStatus.O)
+        };
+        
+        
+        assertTrue(correctGrid.length == newGrid.length);
+
+        for (int i = 0; i < newGrid.length; i++) {
+            assertTrue(newGrid[i].getCoords().equals(correctGrid[i].getCoords()));
+            assertTrue(newGrid[i].getStatus().equals(correctGrid[i].getStatus()));
+        }
     }
 }

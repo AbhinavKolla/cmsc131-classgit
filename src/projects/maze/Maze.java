@@ -37,6 +37,10 @@ public class Maze {
         return null;
     }
 
+    public Grid getGrid(){
+        return grid;
+    }
+
     private Cell getEnd() {
         return getFirstCellWithStatus(CellStatus.E);
     }
@@ -150,8 +154,11 @@ public class Maze {
         
     }
 
-    public void leadsToExit() {
-        dfs(getStart());
+    public boolean leadsToExit() {
+        if(dfs(getStart()))
+            return true;
+        System.out.println("Path not found :(");
+        return false;
     }
 
     private boolean dfs(Cell c){
@@ -175,6 +182,8 @@ public class Maze {
     }
 
 }
+
+
 
 /*
 Cell c = this.getStart();
